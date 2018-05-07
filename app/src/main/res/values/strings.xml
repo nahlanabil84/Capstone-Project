@@ -55,5 +55,8 @@
     <string name="cancel">Cancel</string>
     <string name="color">Color</string>
     <string name="ok">OK</string>
+    <string name="add_all">Add All</string>
+    <string name="confirm">Confirm</string>
+    <string name="add_more"><u>Add more</u></string>
 
 </resources>

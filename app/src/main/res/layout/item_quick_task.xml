@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addFAB"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="64dp"
+        android:background="@drawable/shape_circle"
+        android:backgroundTint="@color/colorDone"
+        android:elevation="6dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_done"
+        android:tint="@color/colorWhite"
+        app:fab_size="mini" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/cancelFAB"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="64dp"
+        android:background="@drawable/shape_circle"
+        android:backgroundTint="@color/colorCancel"
+        android:elevation="6dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_cancel"
+        android:tint="@color/colorWhite"
+        app:fab_size="mini" />
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:elevation="2dp"
+        android:padding="4dp"
+        app:cardCornerRadius="10dp">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <EditText
+                android:id="@+id/titleET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:hint="@string/title"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:weightSum="2">
+
+                <EditText
+                    android:id="@+id/dateET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/ic_date"
+                    android:drawableTint="@color/colorAccent"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/date"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/timeET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/ic_time"
+                    android:drawableTint="@color/colorAccent"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/time"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>

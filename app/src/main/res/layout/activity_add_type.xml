@@ -48,7 +48,6 @@
             android:layout_marginTop="4dp"
             android:drawableEnd="@drawable/shape_circle"
             android:drawablePadding="4dp"
-            android:drawableTint="@color/colorAccent"
             android:editable="false"
             android:focusableInTouchMode="false"
             android:hint="@string/color"

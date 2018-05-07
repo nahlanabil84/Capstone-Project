@@ -77,9 +77,9 @@ public class AddTypeActivity extends AppCompatActivity implements View.OnClickLi
             public void onColorSelected(ColorEnvelope colorEnvelope) {
                 colorET.setText("#" + colorEnvelope.getColorHtml());
 
-                Drawable drawable = DrawableCompat.wrap(getResources().getDrawable(R.drawable.shape_circle));
+                Drawable drawable = DrawableCompat.wrap(getDrawable(R.drawable.shape_circle));
                 DrawableCompat.setTint(drawable, Color.parseColor("#" + colorEnvelope.getColorHtml()));
-                colorET.setCompoundDrawables(null, null, drawable, null);
+                colorET.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

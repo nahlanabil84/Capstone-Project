@@ -10,4 +10,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorNavigationHeader">#fcfcfc</color>
     <color name="colorDefaultGray">#dedede</color>
+
+    <color name="colorDone">#04f508</color>
+    <color name="colorCancel">#f50000</color>
 </resources>
