@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="@string/add_task"
             android:textColor="@color/colorWhite"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
@@ -81,6 +81,8 @@
                 android:drawableEnd="@drawable/ic_date"
                 android:drawablePadding="4dp"
                 android:drawableTint="@color/colorAccent"
+                android:editable="false"
+                android:focusableInTouchMode="false"
                 android:hint="@string/date"
                 android:textColor="@color/colorBlack"
                 android:textSize="18sp" />
@@ -95,6 +97,8 @@
                 android:drawableEnd="@drawable/ic_time"
                 android:drawablePadding="4dp"
                 android:drawableTint="@color/colorAccent"
+                android:editable="false"
+                android:focusableInTouchMode="false"
                 android:hint="@string/time"
                 android:textColor="@color/colorBlack"
                 android:textSize="18sp" />
@@ -115,9 +119,9 @@
                     android:layout_weight="1"
                     android:gravity="center|start"
                     android:hint="@string/sub_tasks"
+                    android:padding="2dp"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"/>
+                    android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/addSubTaskIV"
@@ -235,5 +239,5 @@
         android:text="@string/add_task"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
-        android:textSize="24dp" />
+        android:textSize="20dp" />
 </LinearLayout>

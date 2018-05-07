@@ -51,5 +51,9 @@
     <string name="visit">Visit</string>
     <string name="unspecified">UnSpecified</string>
     <string name="media_hint">(Image - Audio_ Location - Phone number - ...)</string>
+    <string name="empty_">Empty!</string>
+    <string name="cancel">Cancel</string>
+    <string name="color">Color</string>
+    <string name="ok">OK</string>
 
 </resources>
