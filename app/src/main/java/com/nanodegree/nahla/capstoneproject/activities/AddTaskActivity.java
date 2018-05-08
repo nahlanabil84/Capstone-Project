@@ -149,7 +149,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void setRVAdapter() {
-        adapter = new SubTaskRVAdapter(subTasks);
+        adapter = new SubTaskRVAdapter(subTasks, false);
         layoutManager = new LinearLayoutManager(this);
         subTaskRV.setAdapter(adapter);
         subTaskRV.setLayoutManager(layoutManager);
@@ -191,16 +191,6 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         toolbar.setNavigationOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        onBackPressed();
-    }
-
-    @OnClick(R.id.addTypeIV)
-    public void onAddTypeIVClicked() {
-        showAddTypeDialog();
-    }
-
     private void showAddTypeDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(getString(R.string.add_type));
@@ -229,6 +219,16 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         alertDialog.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        onBackPressed();
+    }
+
+    @OnClick(R.id.addTypeIV)
+    public void onAddTypeIVClicked() {
+        showAddTypeDialog();
     }
 
     @OnClick(R.id.dateET)

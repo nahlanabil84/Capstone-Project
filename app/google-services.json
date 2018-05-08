@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "196629287233",
+    "firebase_url": "https://task-siren.firebaseio.com",
+    "project_id": "task-siren",
+    "storage_bucket": "task-siren.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196629287233:android:a6179b0272fa0b6f",
+        "android_client_info": {
+          "package_name": "com.nanodegree.nahla.capstoneproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196629287233-8rq6ie0763b0nfpgqrjveb3m1c2flqmp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nanodegree.nahla.capstoneproject",
+            "certificate_hash": "ab2d1bea51c1fb1c1983b2f61bbc70fc3c759163"
+          }
+        },
+        {
+          "client_id": "196629287233-2bigg104ha5j016u8s2s4lrmkv2pfcv2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAlTn9gIV5UmEphugITTHlNg639e8KVEs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196629287233-2bigg104ha5j016u8s2s4lrmkv2pfcv2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

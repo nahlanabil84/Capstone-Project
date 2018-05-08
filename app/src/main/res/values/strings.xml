@@ -52,11 +52,28 @@
     <string name="unspecified">UnSpecified</string>
     <string name="media_hint">(Image - Audio_ Location - Phone number - ...)</string>
     <string name="empty_">Empty!</string>
+
     <string name="cancel">Cancel</string>
     <string name="color">Color</string>
     <string name="ok">OK</string>
     <string name="add_all">Add All</string>
     <string name="confirm">Confirm</string>
     <string name="add_more"><u>Add more</u></string>
+
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+    <string name="account"><u>Account</u></string>
+    <string name="change_name">Change name</string>
+    <string name="change_password">Change password</string>
+    <string name="change_avatar">Change avatar</string>
+    <string name="application"><u>Application</u></string>
+    <string name="reminder_">Reminder:</string>
+    <string name="never">Never</string>
+    <string name="alarm_">Alarm:</string>
+    <string name="snooze_">Snooze:</string>
+    <string name="min_15">15 Min</string>
+    <string name="highlight_delayed">Highlight delayed with</string>
+    <string name="red"><u>Red</u></string>
 
 </resources>

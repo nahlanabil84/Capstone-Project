@@ -84,7 +84,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setRVAdapter() {
-        adapter = new SubTaskRVAdapter(task.getSubTasks());
+        adapter = new SubTaskRVAdapter(task.getSubTasks(), task.isDone());
         layoutManager = new LinearLayoutManager(this);
         subTasksRV.setAdapter(adapter);
         subTasksRV.setLayoutManager(layoutManager);

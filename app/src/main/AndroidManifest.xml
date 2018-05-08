@@ -21,7 +21,17 @@
         <activity android:name=".activities.TaskDetailsActivity" />
         <activity android:name=".activities.AddTaskActivity" />
         <activity android:name=".activities.AddTypeActivity" />
-        <activity android:name=".activities.AddMultiTasksActivity"></activity>
+        <activity android:name=".activities.AddMultiTasksActivity" />
+
+        <receiver android:name=".widget.TasksWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/tasks_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

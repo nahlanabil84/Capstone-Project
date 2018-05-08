@@ -19,9 +19,11 @@ public class SubTaskRVAdapter extends RecyclerView.Adapter<SubTaskRVAdapter.SubT
 
     View itemView;
     ArrayList<String> subTasks;
+    boolean isTaskDone;
 
-    public SubTaskRVAdapter(ArrayList<String> subTasks) {
+    public SubTaskRVAdapter(ArrayList<String> subTasks, boolean isTaskDone) {
         this.subTasks = subTasks;
+        this.isTaskDone = isTaskDone;
     }
 
     @NonNull
@@ -37,6 +39,7 @@ public class SubTaskRVAdapter extends RecyclerView.Adapter<SubTaskRVAdapter.SubT
     public void onBindViewHolder(@NonNull final SubTaskViewHolder holder, final int position) {
         holder.emptyVH();
 
+        holder.subTaskCB.setChecked(isTaskDone);
         holder.subTaskCB.setText(subTasks.get(position));
 
         holder.subTaskCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

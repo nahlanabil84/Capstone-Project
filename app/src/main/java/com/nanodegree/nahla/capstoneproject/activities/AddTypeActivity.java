@@ -97,6 +97,12 @@ public class AddTypeActivity extends AppCompatActivity implements View.OnClickLi
             type.setTypeTitle(typeET.getText().toString());
         else
             typeET.setError(getString(R.string.empty_));
+
+        if (!colorET.getText().toString().isEmpty())
+            type.setTypeColor(colorET.getText().toString());
+        else
+            type.setTypeColor(String.valueOf(getResources().getColor(R.color.colorDefaultGray)));
+
     }
 
     @Override

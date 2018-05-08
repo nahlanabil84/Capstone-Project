@@ -40,28 +40,33 @@ public class TaskRVAdapter extends RecyclerView.Adapter<TaskRVAdapter.TaskViewHo
     public void onBindViewHolder(@NonNull final TaskViewHolder holder, final int position) {
         holder.emptyVH();
 
-        if (!tasks.get(position).isDone()) {
-            holder.taskTV.setText(tasks.get(position).getTaskTitle());
-            holder.dayTV.setText(tasks.get(position).getTaskDate());
-            holder.timeTV.setText(tasks.get(position).getTaskTime());
-        }
+        holder.taskTV.setText(tasks.get(position).getTaskTitle());
+        holder.dayTV.setText(tasks.get(position).getTaskDate());
+        holder.timeTV.setText(tasks.get(position).getTaskTime());
+
+        if (tasks.get(position).isDone())
+            holder.taskCB.setChecked(true);
 
         holder.taskCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    buttonView.setChecked(true);
+                if (!tasks.get(position).isDone()) {
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonView.setChecked(false);
-                            tasks.remove(position);
-                            notifyDataSetChanged();
-                        }
-                    }, 1000);
+                    if (isChecked) {
+                        buttonView.setChecked(true);
 
-                }
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                buttonView.setChecked(false);
+                                tasks.remove(position);
+                                notifyDataSetChanged();
+                            }
+                        }, 1000);
+
+                    }
+                } else
+                    buttonView.setChecked(!isChecked);
             }
         });
 

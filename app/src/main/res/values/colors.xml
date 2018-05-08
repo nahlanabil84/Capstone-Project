@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#f2b705</color>
+    <color name="colorPrimaryLight">#b3ffdc73</color>
     <color name="colorPrimaryDark">#c49300</color>
     <color name="colorAccent">#4187ff</color>
 
@@ -10,7 +11,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorNavigationHeader">#fcfcfc</color>
     <color name="colorDefaultGray">#dedede</color>
-
+    <color name="colorDarkGray">#616161</color>
     <color name="colorDone">#04f508</color>
     <color name="colorCancel">#f50000</color>
 </resources>
