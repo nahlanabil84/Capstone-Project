@@ -75,5 +75,16 @@
     <string name="min_15">15 Min</string>
     <string name="highlight_delayed">Highlight delayed with</string>
     <string name="red"><u>Red</u></string>
+    <string name="short_pw">Short password</string>
+    <string name="auth_failed">Failed to login</string>
+    <string name="unmatch_pw">Passwords not matched</string>
+    <string name="camera">Open camera</string>
+    <string name="gallery">Open gallery</string>
+    <string name="set_photo">Set photo</string>
+    <string name="permission_denied">Can\'t access Gallery or Photos</string>
+    <string name="meeting">Meeting</string>
+    <string name="study">Study</string>
+
+    <string name="error_no_type_added">No type added!!</string>
 
 </resources>

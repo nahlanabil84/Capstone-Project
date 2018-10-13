@@ -6,13 +6,20 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nanodegree.nahla.capstoneproject.R;
+import com.nanodegree.nahla.capstoneproject.Utils.SharedPref;
 import com.nanodegree.nahla.capstoneproject.activities.AddTypeActivity;
 import com.nanodegree.nahla.capstoneproject.adapters.TypeRVAdapter;
 import com.nanodegree.nahla.capstoneproject.models.Type;
@@ -24,7 +31,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.nanodegree.nahla.capstoneproject.Utils.Const.USERS_TABLE;
+import static com.nanodegree.nahla.capstoneproject.Utils.Const.USERS_TYPES_TABLE;
+
 public class TypesFragment extends Fragment {
+    final String TAG = "Database Log";
 
     @BindView(R.id.typesRV)
     RecyclerView typesRV;
@@ -38,13 +49,15 @@ public class TypesFragment extends Fragment {
     private TypeRVAdapter adapter;
     private ArrayList<Type> types;
     private GridLayoutManager layoutManager;
+    private DatabaseReference databaseRef;
+    private int typesSize;
 
 
     public TypesFragment() {
         // Required empty public constructor
     }
 
-    public static TypesFragment newInstance() {
+    public static TypesFragment newTypesFInstance() {
         TypesFragment fragment = new TypesFragment();
         return fragment;
     }
@@ -61,22 +74,36 @@ public class TypesFragment extends Fragment {
 
         unbinder = ButterKnife.bind(this, view);
 
+        databaseRef = FirebaseDatabase.getInstance()
+                .getReference()
+                .child(USERS_TABLE + "/" + new SharedPref(getContext()).getUserFbId() + "/" + USERS_TYPES_TABLE);
+
         setToolbar();
         setUpRV();
-
-        for (int i = 0; i < 5; i++)
-            testType(String.format("Type %d", i));
+        readDatabaseTypes();
 
         return view;
     }
 
-    private void testType(String format) {
-        Type type = new Type();
-        type.setTypeTitle(format);
-        type.setTypeColor("#56f747");
+    private void readDatabaseTypes() {
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                types.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Type type = snapshot.getValue(Type.class);
+                    type.setTypeId(snapshot.getKey());
+                    types.add(type);
+                    typesSize = Integer.parseInt(snapshot.getKey());
+                    adapter.notifyDataSetChanged();
+                }
+            }
 
-        types.add(type);
-        adapter.notifyDataSetChanged();
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
     }
 
     private void setUpRV() {
@@ -103,6 +130,6 @@ public class TypesFragment extends Fragment {
 
     @OnClick(R.id.addTypeFAB)
     public void onViewClicked() {
-        getContext().startActivity(AddTypeActivity.newInstance(getContext()));
+        getContext().startActivity(AddTypeActivity.newInstance(getContext(), typesSize));
     }
 }

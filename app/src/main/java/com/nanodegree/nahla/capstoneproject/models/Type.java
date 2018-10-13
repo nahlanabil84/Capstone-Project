@@ -5,15 +5,15 @@ import android.os.Parcelable;
 
 public class Type implements Parcelable {
 
-    int typeId;
+    String typeId;
     String typeTitle;
     String typeColor;
 
-    public int getTypeId() {
+    public String getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(int typeId) {
+    public void setTypeId(String typeId) {
         this.typeId = typeId;
     }
 
@@ -44,7 +44,7 @@ public class Type implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.typeId);
+        dest.writeString(this.typeId);
         dest.writeString(this.typeTitle);
         dest.writeString(this.typeColor);
     }
@@ -53,7 +53,7 @@ public class Type implements Parcelable {
     }
 
     protected Type(Parcel in) {
-        this.typeId = in.readInt();
+        this.typeId = in.readString();
         this.typeTitle = in.readString();
         this.typeColor = in.readString();
     }
