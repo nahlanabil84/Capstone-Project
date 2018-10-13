@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 public class Task implements Parcelable {
 
-    int taskId;
+    String taskId;
     boolean isDone;
     String taskTitle;
-    String taskType;
+    Type taskType;
     int taskPriority;
     String taskDate;
     String taskTime;
@@ -21,11 +21,11 @@ public class Task implements Parcelable {
     ArrayList<String> subTasks;
     String taskNote;
 
-    public int getTaskId() {
+    public String getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(int taskId) {
+    public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
 
@@ -45,11 +45,11 @@ public class Task implements Parcelable {
         this.taskTitle = taskTitle;
     }
 
-    public String getTaskType() {
+    public Type getTaskType() {
         return taskType;
     }
 
-    public void setTaskType(String taskType) {
+    public void setTaskType(Type taskType) {
         this.taskType = taskType;
     }
 
@@ -132,10 +132,10 @@ public class Task implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.taskId);
+        dest.writeString(this.taskId);
         dest.writeByte(this.isDone ? (byte) 1 : (byte) 0);
         dest.writeString(this.taskTitle);
-        dest.writeString(this.taskType);
+        dest.writeParcelable(this.taskType, flags);
         dest.writeInt(this.taskPriority);
         dest.writeString(this.taskDate);
         dest.writeString(this.taskTime);
@@ -151,10 +151,10 @@ public class Task implements Parcelable {
     }
 
     protected Task(Parcel in) {
-        this.taskId = in.readInt();
+        this.taskId = in.readString();
         this.isDone = in.readByte() != 0;
         this.taskTitle = in.readString();
-        this.taskType = in.readString();
+        this.taskType = in.readParcelable(Type.class.getClassLoader());
         this.taskPriority = in.readInt();
         this.taskDate = in.readString();
         this.taskTime = in.readString();

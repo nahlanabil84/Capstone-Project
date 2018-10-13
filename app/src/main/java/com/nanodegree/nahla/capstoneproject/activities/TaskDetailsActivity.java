@@ -84,10 +84,14 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setRVAdapter() {
-        adapter = new SubTaskRVAdapter(task.getSubTasks(), task.isDone());
-        layoutManager = new LinearLayoutManager(this);
-        subTasksRV.setAdapter(adapter);
-        subTasksRV.setLayoutManager(layoutManager);
+        if (task.getSubTasks() == null) {
+            subTasksContainerLL.setVisibility(View.GONE);
+        } else {
+            adapter = new SubTaskRVAdapter(task.getSubTasks(), task.isDone());
+            layoutManager = new LinearLayoutManager(this);
+            subTasksRV.setAdapter(adapter);
+            subTasksRV.setLayoutManager(layoutManager);
+        }
     }
 
     private void setToolbar() {
@@ -102,7 +106,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
         taskTitleTV.setText(task.getTaskTitle());
 
         if (task.getTaskType() != null)
-            typeTV.setText(task.getTaskType());
+            typeTV.setText(task.getTaskType().getTypeTitle());
         else
             typeTV.setText(getString(R.string.unspecified));
 

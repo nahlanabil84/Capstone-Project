@@ -8,5 +8,6 @@ public class Const {
 
     //Database keys name
     public final static String USERS_TABLE = "users";
+    public final static String USERS_TASKS_TABLE = "tasks";
     public final static String USERS_TYPES_TABLE = "types";
 }

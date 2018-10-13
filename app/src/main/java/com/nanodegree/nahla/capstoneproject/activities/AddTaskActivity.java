@@ -7,14 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,10 +25,19 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nanodegree.nahla.capstoneproject.R;
+import com.nanodegree.nahla.capstoneproject.Utils.SharedPref;
 import com.nanodegree.nahla.capstoneproject.adapters.SubTaskRVAdapter;
 import com.nanodegree.nahla.capstoneproject.models.Task;
+import com.nanodegree.nahla.capstoneproject.models.Type;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,7 +46,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.nanodegree.nahla.capstoneproject.Utils.Const.USERS_TABLE;
+import static com.nanodegree.nahla.capstoneproject.Utils.Const.USERS_TASKS_TABLE;
+import static com.nanodegree.nahla.capstoneproject.Utils.Const.USERS_TYPES_TABLE;
+
 public class AddTaskActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+    final String TAG = "Database Log";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -60,6 +77,8 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     EditText subTasksET;
     @BindView(R.id.addSubTaskIV)
     ImageView addSubTaskIV;
+    @BindView(R.id.addTaskB)
+    Button addTaskB;
 
     private SubTaskRVAdapter adapter;
     private Task task;
@@ -67,12 +86,15 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<String> subTasks;
 
     ArrayAdapter<String> typesAA;
-    ArrayList<String> types;
-    String type;
+    ArrayList<Type> types;
+    Type type;
+    ArrayList<String> typesTitle;
 
     private Calendar mCalender;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
+    private DatabaseReference databaseRef;
+    private String typeInsertPosition;
 
     public static Intent newInstance(Context context) {
         Intent intent = new Intent(context, AddTaskActivity.class);
@@ -84,22 +106,52 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        task = new Task();
-        subTasks = new ArrayList<>();
-        types = new ArrayList<>();
-        types.add("UnSpecified");
-        types.add("Meeting");
-        types.add("Call");
-        types.add("Study");
-
-
         ButterKnife.bind(this);
 
+        setUp();
         setToolbar();
         setRVAdapter();
         setSpinnerAdapter();
         setDateDialog();
         setTimeDialog();
+    }
+
+    private void setUp() {
+        databaseRef = FirebaseDatabase.getInstance()
+                .getReference()
+                .child(USERS_TABLE).child(new SharedPref(this).getUserFbId());
+        task = new Task();
+        type = new Type();
+        subTasks = new ArrayList<>();
+        types = new ArrayList<>();
+        typesTitle = new ArrayList<>();
+
+    }
+
+    private void readDatabaseTypes() {
+        databaseRef.child(USERS_TYPES_TABLE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                types.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Type type = snapshot.getValue(Type.class);
+                    type.setTypeId(snapshot.getKey());
+                    types.add(type);
+                    typeInsertPosition = String.valueOf(Integer.parseInt(snapshot.getKey()) + 1);
+                }
+                typesAA.notifyDataSetChanged();
+                typesTitle.clear();
+                for (int i = 0; i < types.size(); i++)
+                    typesTitle.add(types.get(i).getTypeTitle());
+                typesTitle.add(0, "UnSpecified");
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
     }
 
     private void setDateDialog() {
@@ -142,7 +194,10 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void setSpinnerAdapter() {
-        typesAA = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, types);
+        readDatabaseTypes();
+        typesTitle.add(0, "UnSpecified");
+
+        typesAA = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, typesTitle);
         typesAA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeS.setAdapter(typesAA);
         typeS.setOnItemSelectedListener(this);
@@ -156,7 +211,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void setUpDetails() {
-
+        addTaskB.setClickable(false);
         if (titleET.getText().toString() != null)
             task.setTaskTitle(titleET.getText().toString());
         else
@@ -175,12 +230,13 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         if (seekBar != null)
             task.setTaskPriority(seekBar.getProgress());
 
-        if (subTasks != null && subTasks.size() > 0)
-            task.setSubTasks(subTasks);
+//        if (subTasks != null && subTasks.size() > 0)
+        task.setSubTasks(subTasks);
 
         if (type != null)
             task.setTaskType(type);
 
+        createTask();
     }
 
     private void setToolbar() {
@@ -206,7 +262,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         alertDialog.setPositiveButton(getString(R.string.add_type), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (!input.getText().toString().isEmpty())
-                    types.add(input.getText().toString());
+                    createType(input.getText().toString());
 
                 setSpinnerAdapter();
                 dialog.cancel();
@@ -219,6 +275,28 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         alertDialog.show();
+    }
+
+    private void createType(String newTypeS) {
+        if (!newTypeS.equals(null)) {
+            Type newType = new Type();
+            newType.setTypeTitle(newTypeS);
+            newType.setTypeColor("#dedede");
+            databaseRef.child(USERS_TYPES_TABLE).child(typeInsertPosition + "").setValue(newType);
+        } else {
+            Toast.makeText(this, getString(R.string.error_no_type_added), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void createTask() {
+        final String taskId = String.valueOf(new SharedPref(getApplicationContext()).getTaskId() + 1);
+        databaseRef.child(USERS_TASKS_TABLE).child(taskId).setValue(task).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                new SharedPref(getApplicationContext()).putTaskId(Integer.parseInt(taskId));
+                finish();
+            }
+        });
     }
 
     @Override
@@ -267,7 +345,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        type = parent.getItemAtPosition(position).toString();
+        type.setTypeTitle(parent.getItemAtPosition(position).toString());
+        if (position > 0) {
+            type.setTypeId(types.get(position - 1).getTypeId());
+            type.setTypeColor(types.get(position - 1).getTypeColor());
+        }
     }
 
     @Override

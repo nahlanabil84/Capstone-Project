@@ -52,6 +52,10 @@ public class Type implements Parcelable {
     public Type() {
     }
 
+    public Type(String typeTitle) {
+        this.typeTitle = typeTitle;
+    }
+
     protected Type(Parcel in) {
         this.typeId = in.readString();
         this.typeTitle = in.readString();

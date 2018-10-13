@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +34,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.nanodegree.nahla.capstoneproject.Utils.Const.USERS_TABLE;
+import static com.nanodegree.nahla.capstoneproject.Utils.Const.USERS_TASKS_TABLE;
 import static com.nanodegree.nahla.capstoneproject.Utils.Const.USERS_TYPES_TABLE;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -41,8 +43,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     TextView titleTV;
     ImageView sortIV;
+
     @BindView(R.id.taskRV)
     RecyclerView taskRV;
+    @BindView(R.id.noTasksTV)
+    TextView noTasksTV;
+    @BindView(R.id.menu)
+    FloatingActionMenu menu;
 
     Unbinder unbinder;
 
@@ -75,23 +82,47 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         unbinder = ButterKnife.bind(this, view);
         databaseRef = FirebaseDatabase.getInstance()
                 .getReference()
-                .child(USERS_TABLE + "/" + new SharedPref(getContext()).getUserFbId() + "/" + USERS_TYPES_TABLE);
-        readDatabaseTypes();
+                .child(USERS_TABLE).child(new SharedPref(getContext()).getUserFbId());
 
+        readDatabaseTypes();
         setUpToolbar();
         setUpRV();
-        for (int i = 0; i < 5; i++)
-            testTask(String.format("Task %d", i));
+        readDatabaseTasks();
 
         return view;
     }
 
     private void readDatabaseTypes() {
-        databaseRef.addValueEventListener(new ValueEventListener() {
+        databaseRef.child(USERS_TYPES_TABLE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     typesSize = Integer.parseInt(snapshot.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    private void readDatabaseTasks() {
+        databaseRef.child(USERS_TASKS_TABLE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    noTasksTV.setVisibility(View.GONE);
+                    tasks.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Task task = snapshot.getValue(Task.class);
+                        task.setTaskId(snapshot.getKey());
+                        tasks.add(task);
+                        taskAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    noTasksTV.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -110,32 +141,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         taskRV.setAdapter(taskAdapter);
     }
 
-    private void testTask(String format) {
-        ArrayList<String> subTasks = new ArrayList<>();
-        subTasks.add("asdfghjkl zxcvbnmx");
-        subTasks.add("7890");
-        subTasks.add("awxyz");
-        subTasks.add("a1b2c3d4e5f6g7h8i9j0");
-        subTasks.add("7890");
-        subTasks.add("awxyz");
-        subTasks.add("a1b2c3d4e5f6g7h8i9j0");
-
-        Task task = new Task();
-        task.setDone(false);
-        task.setTaskTitle(format);
-        task.setTaskType("normal");
-        task.setTaskPriority(5);
-        task.setTaskDate("13 - 5 - 2018");
-        task.setTaskTime("11:45 AM");
-        task.setLocationSet(false);
-        task.setTaskNote("Meet at my place by 12:15 PM");
-        task.setTaskPhone("400");
-        task.setSubTasks(subTasks);
-
-        tasks.add(task);
-        taskAdapter.notifyDataSetChanged();
-    }
-
     private void setUpToolbar() {
         titleTV = getActivity().findViewById(R.id.titleTV);
         titleTV.setText(getString(R.string.today_task));
@@ -148,7 +153,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+      //  unbinder.unbind();
     }
 
     @Override
@@ -167,12 +172,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.typeFAB:
                 getContext().startActivity(AddTypeActivity.newInstance(getContext(), typesSize));
+                menu.close(true);
                 break;
             case R.id.listFAB:
                 getContext().startActivity(AddMultiTasksActivity.newInstance(getContext()));
+                menu.close(true);
                 break;
             case R.id.taskFAB:
                 getContext().startActivity(AddTaskActivity.newInstance(getContext()));
+                menu.close(true);
                 break;
         }
     }

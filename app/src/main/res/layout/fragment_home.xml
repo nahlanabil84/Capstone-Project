@@ -12,7 +12,17 @@
         android:id="@+id/taskRV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_today_task"/>
+        tools:itemCount="4"
+        tools:listitem="@layout/item_today_task" />
+
+    <TextView
+        android:id="@+id/noTasksTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/no_tasks_added"
+        android:textSize="28sp"
+        android:visibility="gone" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"

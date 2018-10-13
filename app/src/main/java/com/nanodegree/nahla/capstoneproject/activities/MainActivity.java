@@ -11,10 +11,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +46,8 @@ import static com.nanodegree.nahla.capstoneproject.fragments.TypesFragment.newTy
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener {
 
+    final String TAG = "Database Log";
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
@@ -57,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View headerV;
     private TextView headerNameTV;
     private CircleImageView headerImageIV;
-    private FirebaseAuth auth;
+    private DatabaseReference databaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        auth = FirebaseAuth.getInstance();
+        databaseRef = FirebaseDatabase.getInstance()
+                .getReference()
+                .child(USERS_TABLE)
+                .child(new SharedPref(this).getUserFbId());
 
         setUpToolbar();
         setUpDrawerHeader();
@@ -77,32 +84,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         headerNameTV = headerV.findViewById(R.id.nameTV);
         headerImageIV = headerV.findViewById(R.id.profileCIV);
 
-        if (auth.getCurrentUser() != null) {
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USERS_TABLE).child(auth.getCurrentUser().getUid());
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.child(new SharedPref(getApplicationContext()).getUserFbId()).getValue(User.class);
 
-                    User user = dataSnapshot.getValue(User.class);
+                if (user != null) {
+                    headerNameTV.setText(user.getName());
 
-                    if (user != null) {
-                        headerNameTV.setText(user.getName());
-
-                        Glide.with(getApplicationContext())
-                                .load(user.getProfileImg())
-                                .centerCrop()
-                                .placeholder(R.drawable.person)
-                                .error(R.drawable.person)
-                                .into(headerImageIV);
-                    }
-
+                    Glide.with(getApplicationContext())
+                            .load(user.getProfileImg())
+                            .centerCrop()
+                            .placeholder(R.drawable.person)
+                            .error(R.drawable.person)
+                            .into(headerImageIV);
+                } else {
+                    Toast.makeText(getApplicationContext(), "User is null", Toast.LENGTH_LONG).show();
                 }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
     }
 
     private void setUpToolbar() {

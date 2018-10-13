@@ -87,4 +87,6 @@
 
     <string name="error_no_type_added">No type added!!</string>
 
+    <string name="no_tasks_added">No tasks!!</string>
+
 </resources>

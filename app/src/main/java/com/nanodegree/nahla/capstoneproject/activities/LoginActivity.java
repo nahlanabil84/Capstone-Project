@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                         } else {
-                            new SharedPref(getApplicationContext()).putUserFBId(FirebaseAuth.getInstance().getUid());
+                            new SharedPref(LoginActivity.this).putUserFBId(FirebaseAuth.getInstance().getUid());
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             finish();
@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
+            new SharedPref(this).putUserFBId(currentUser.getUid());
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }

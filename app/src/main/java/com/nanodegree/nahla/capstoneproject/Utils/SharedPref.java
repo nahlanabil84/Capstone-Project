@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 public class SharedPref {
     private static final String USER_FB_ID = "USER_FB_ID";
+    private static final String TASK_ID = "TASK_ID";
     public static SharedPreferences sharedPreferences;
     private static SharedPref pref;
     public static SharedPreferences.Editor editor;
@@ -28,6 +29,15 @@ public class SharedPref {
 
     public String getUserFbId() {
         return sharedPreferences.getString(USER_FB_ID, "");
+    }
+
+    public void putTaskId(int taskId) {
+        editor.putInt(TASK_ID, taskId);
+        editor.commit();
+    }
+
+    public int getTaskId() {
+        return sharedPreferences.getInt(TASK_ID, -1);
     }
 
 }

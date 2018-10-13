@@ -12,6 +12,7 @@ public class User implements Parcelable {
     String name;
     String profileImg;
     ArrayList<Type> types;
+    ArrayList<Task> tasks;
 
     public String getuId() {
         return uId;
@@ -53,6 +54,14 @@ public class User implements Parcelable {
         this.types = types;
     }
 
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(ArrayList<Task> tasks) {
+        this.tasks = tasks;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -65,6 +74,7 @@ public class User implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.profileImg);
         dest.writeTypedList(this.types);
+        dest.writeTypedList(this.tasks);
     }
 
     public User() {
@@ -76,6 +86,7 @@ public class User implements Parcelable {
         this.name = in.readString();
         this.profileImg = in.readString();
         this.types = in.createTypedArrayList(Type.CREATOR);
+        this.tasks = in.createTypedArrayList(Task.CREATOR);
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

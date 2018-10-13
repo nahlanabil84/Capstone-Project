@@ -130,7 +130,6 @@ public class AddTypeActivity extends AppCompatActivity implements View.OnClickLi
         } else {
             Toast.makeText(this, getString(R.string.error_no_type_added), Toast.LENGTH_LONG);
         }
-
     }
 
     @Override

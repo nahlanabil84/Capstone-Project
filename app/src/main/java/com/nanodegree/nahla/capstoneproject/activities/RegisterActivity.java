@@ -256,16 +256,19 @@ public class RegisterActivity extends AppCompatActivity {
                         } else {
                             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                             User user = new User();
+                            ArrayList<com.nanodegree.nahla.capstoneproject.models.Task> tasks = new ArrayList<>();
                             user.setName(nameET.getText().toString());
                             user.setEmail(firebaseUser.getEmail());
                             user.setuId(firebaseUser.getUid());
                             user.setProfileImg(selectedImageURI + "");
                             user.setTypes(createBasicTypes());
+                            user.setTasks(tasks);
 
                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USERS_TABLE);
                             ref.child(firebaseUser.getUid()).setValue(user);
 
                             new SharedPref(getApplicationContext()).putUserFBId(FirebaseAuth.getInstance().getUid());
+                            new SharedPref(getApplicationContext()).putTaskId(-1);
                             startActivity(new Intent(RegisterActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             finish();
                         }

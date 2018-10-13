@@ -76,7 +76,7 @@ public class TypesFragment extends Fragment {
 
         databaseRef = FirebaseDatabase.getInstance()
                 .getReference()
-                .child(USERS_TABLE + "/" + new SharedPref(getContext()).getUserFbId() + "/" + USERS_TYPES_TABLE);
+                .child(USERS_TABLE).child(new SharedPref(getContext()).getUserFbId());
 
         setToolbar();
         setUpRV();
@@ -86,7 +86,7 @@ public class TypesFragment extends Fragment {
     }
 
     private void readDatabaseTypes() {
-        databaseRef.addValueEventListener(new ValueEventListener() {
+        databaseRef.child(USERS_TYPES_TABLE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 types.clear();

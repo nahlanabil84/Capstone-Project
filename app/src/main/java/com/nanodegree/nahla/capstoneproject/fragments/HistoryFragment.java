@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.nanodegree.nahla.capstoneproject.R;
 import com.nanodegree.nahla.capstoneproject.adapters.TaskRVAdapter;
 import com.nanodegree.nahla.capstoneproject.models.Task;
+import com.nanodegree.nahla.capstoneproject.models.Type;
 
 import java.util.ArrayList;
 
@@ -90,7 +91,7 @@ public class HistoryFragment extends Fragment {
         Task task = new Task();
         task.setDone(true);
         task.setTaskTitle(format);
-        task.setTaskType("normal");
+        task.setTaskType(new Type("normal"));
         task.setTaskPriority(5);
         task.setTaskDate("13 - 5 - 2018");
         task.setTaskTime("11:45 AM");
